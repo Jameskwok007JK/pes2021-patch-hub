@@ -73,6 +73,7 @@
         state.visible = PAGE_SIZE;
         document.querySelectorAll(".filter-chip").forEach(function(x){x.classList.remove("active")});
         b.classList.add("active");
+        if(window.Stats && Stats.filter) Stats.filter(c.key);
         // sync the "all" chip
         render();
       });
@@ -85,6 +86,7 @@
       state.category="all"; state.visible=PAGE_SIZE;
       document.querySelectorAll(".filter-chip").forEach(function(x){x.classList.remove("active")});
       allChip.classList.add("active");
+      if(window.Stats && Stats.filter) Stats.filter("all");
       render();
     });
 
@@ -96,6 +98,7 @@
       t = setTimeout(function(){
         state.query = el.search.value.trim().toLowerCase();
         state.visible = PAGE_SIZE;
+        if(window.Stats && Stats.search && state.query) Stats.search(state.query);
         render();
       }, 180);
     });
@@ -111,11 +114,29 @@
 
     // 加载更多
     el.loadMore.addEventListener("click", function(){
-      state.visible += PAGE_SIZE; render();
+      state.visible += PAGE_SIZE;
+      if(window.Stats && Stats.loadMore) Stats.loadMore();
+      render();
     });
 
     document.addEventListener("keydown", function(e){
       if(e.key==="Escape") closeModal();
+    });
+
+    // 弹窗内下载按钮 / 原页面链接：事件委托（内容每次重写，直接绑定会失效）
+    el.modalContent.addEventListener("click", function(e){
+      var dlBtn = e.target.closest ? e.target.closest(".dl-btn") : null;
+      if(dlBtn){
+        var p = patches[+el.modalContent.getAttribute("data-id")];
+        var host = dlBtn.getAttribute("data-host") || "";
+        if(window.Stats && Stats.downloadClick) Stats.downloadClick(p, host);
+        return;
+      }
+      var srcLink = e.target.closest ? e.target.closest(".modal-source-link") : null;
+      if(srcLink){
+        var p2 = patches[+el.modalContent.getAttribute("data-id")];
+        if(window.Stats && Stats.sourceLink) Stats.sourceLink(p2);
+      }
     });
 
     render();
@@ -157,7 +178,11 @@
     }
     // 绑定卡片点击
     Array.prototype.forEach.call(el.grid.querySelectorAll(".card"), function(card){
-      card.addEventListener("click", function(){ openModal(card.getAttribute("data-id")); });
+      card.addEventListener("click", function(){
+        var id = card.getAttribute("data-id");
+        if(window.Stats && Stats.cardClick) Stats.cardClick(patches[+id]);
+        openModal(id);
+      });
     });
   }
 
@@ -207,7 +232,7 @@
             '<div class="dl-host"><span class="host-icon">'+icon+'</span>'+escapeHtml(host)+'</div>'+
             '<div class="dl-label">'+escapeHtml((d.label||"下载").slice(0,40))+'</div>'+
           '</div>'+
-          '<a class="dl-btn" href="'+escapeAttr(d.url)+'" target="_blank" rel="noopener noreferrer">前往下载 ↗</a>'+
+          '<a class="dl-btn" data-host="'+escapeAttr(host)+'" href="'+escapeAttr(d.url)+'" target="_blank" rel="noopener noreferrer">前往下载 ↗</a>'+
         '</div>';
     }).join("");
     if(!dlHtml) dlHtml = '<p style="font-size:13px;color:var(--muted)">暂无直接下载链接，请前往原页面查看。</p>';
@@ -233,6 +258,7 @@
         '<p class="modal-note">本站仅聚合公开信息，不托管任何文件。资源版权归原作者所有。若链接失效，可前往 <a class="modal-source-link" href="'+escapeAttr(p.url)+'" target="_blank" rel="noopener noreferrer">原始页面 ↗</a> 查看更新。</p>'+
       '</div>';
     el.modalContent.innerHTML = content;
+    el.modalContent.setAttribute("data-id", String(id));
     el.modal.hidden = false;
     document.body.style.overflow = "hidden";
   }
