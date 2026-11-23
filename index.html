@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PES 2021 补丁下载站 - 全网补丁聚合</title>
+  <meta name="description" content="每日自动更新，聚合全网 eFootball PES 2021 补丁、脸型、球衣、画质模组，提供直达下载链接。">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#" aria-label="回到顶部">
+        <span class="brand-ball">⚽</span>
+        <span class="brand-text">
+          <strong>PES 2021</strong>
+          <small>补丁下载站</small>
+        </span>
+      </a>
+      <div class="header-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="搜索补丁名称、球员、球队..." autocomplete="off">
+        <button id="clearSearch" class="clear-btn" title="清空搜索">✕</button>
+      </div>
+      <nav class="header-nav">
+        <a href="#library">补丁库</a>
+        <a href="#about">关于</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 英雄区 -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <span class="hero-tag">⚡ 每日 07:00 自动更新</span>
+        <h1>全网 <em>PES 2021</em> 补丁<br>一站聚合 · 直达下载</h1>
+        <p>脸型、球衣、画质、球场、阵容存档…… 我们每天从全网搜集最新补丁，整理成卡片，附上简介与直达资源链接，下载不再到处翻。</p>
+        <div class="hero-stats">
+          <div class="stat"><b id="statTotal">--</b><span>个补丁</span></div>
+          <div class="stat"><b id="statCats">--</b><span>个分类</span></div>
+          <div class="stat"><b id="statUpdated">--</b><span>最近更新</span></div>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="ball-deco">⚽</div>
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 主体 -->
+  <main id="library" class="container">
+
+    <!-- 分类筛选 -->
+    <div class="filter-bar">
+      <button class="filter-chip active" data-cat="all">全部 <span class="chip-count" id="cnt-all">0</span></button>
+      <div id="categoryChips" class="chips-wrap"></div>
+    </div>
+
+    <!-- 工具条 -->
+    <div class="toolbar">
+      <div class="result-info">
+        共找到 <b id="resultCount">0</b> 个补丁
+        <span class="update-time" id="updateTime"></span>
+      </div>
+      <div class="toolbar-right">
+        <label for="sortSelect">排序：</label>
+        <select id="sortSelect">
+          <option value="newest">最新发布</option>
+          <option value="oldest">最早发布</option>
+          <option value="title">名称 A-Z</option>
+          <option value="category">按分类</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 补丁卡片网格 -->
+    <div id="grid" class="grid"></div>
+
+    <!-- 加载更多 -->
+    <div id="loadMoreWrap" class="load-more-wrap">
+      <button id="loadMore" class="load-more-btn">加载更多补丁 ↓</button>
+    </div>
+
+    <!-- 空状态 -->
+    <div id="emptyState" class="empty-state" hidden>
+      <div class="empty-icon">🔎</div>
+      <h3>没有找到匹配的补丁</h3>
+      <p>换个关键词，或点击「全部」分类试试。</p>
+      <button onclick="resetFilters()" class="btn-outline">重置筛选</button>
+    </div>
+  </main>
+
+  <!-- 关于区 -->
+  <section id="about" class="about">
+    <div class="container about-inner">
+      <div>
+        <h2>关于本站</h2>
+        <p>本站通过全网搜索自动聚合 eFootball PES 2021 的公开补丁资源，每日上午 7:00 更新。每个补丁都附有介绍图、中文简介摘要与直达资源链接，点击即可跳转到原始下载页面。</p>
+        <p class="disclaimer">⚠️ 本站仅做信息聚合与导航，不托管任何文件。所有资源版权归原作者所有，请支持原作者。下载前请留意压缩包密码与安装说明。</p>
+      </div>
+      <div class="about-card">
+        <h3>数据来源</h3>
+        <ul>
+          <li>pes-files.com 及全网公开资源站</li>
+          <li>下载宿主：Sharemods / Modsfire / Mediafire 等</li>
+          <li>每日定时自动抓取更新</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>⚽ PES 2021 补丁下载站 · 每日自动更新 · 仅供个人学习研究使用</p>
+    </div>
+  </footer>
+
+  <!-- 详情弹窗 -->
+  <div id="modal" class="modal" hidden>
+    <div class="modal-backdrop" onclick="closeModal()"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true">
+      <button class="modal-close" onclick="closeModal()" aria-label="关闭">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
