@@ -165,7 +165,7 @@
     var id = patches.indexOf(p);
     var img = p.image || "";
     var imgHtml = img
-      ? '<img class="card-img" src="'+escapeAttr(img)+'" alt="'+escapeAttr(p.title)+'" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'+ '<div class="card-img-fallback" style="display:none">⚽</div>'
+      ? '<img class="card-img" src="'+escapeAttr(img)+'" alt="'+escapeAttr(p.title)+'" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'+ '<div class="card-img-fallback" style="display:none">⚽</div>'
       : '<div class="card-img-fallback">⚽</div>';
     var dlCount = (p.downloads||[]).length;
     var cat = p.category ? p.category.zh : "补丁";
@@ -196,7 +196,7 @@
     if(!p) return;
     var cat = p.category ? p.category.zh : "补丁";
     var imgHtml = p.image
-      ? '<img class="modal-hero" src="'+escapeAttr(p.image)+'" alt="'+escapeAttr(p.title)+'" onerror="this.style.display=\'none\'">'
+      ? '<img class="modal-hero" src="'+escapeAttr(p.image)+'" alt="'+escapeAttr(p.title)+'" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'">'
       : '';
     var dlHtml = (p.downloads||[]).map(function(d){
       var host = d.host || "";
